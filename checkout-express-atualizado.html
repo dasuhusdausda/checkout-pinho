@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagamento Seguro - BrasilPay Express</title>
+  <!-- Tailwind CSS para design premium -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Outfit & Inter Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <!-- Lucide Icons para ícones bonitos -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti para animação de sucesso -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      position: relative;
+    }
+
+    /* Textura de fundo oficial com a logomarca repetida */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('mercado-pago.png');
+      background-repeat: repeat;
+      background-size: 160px; /* Tamanho ideal para repetição elegante */
+      opacity: 0.035; /* Suavidade para parecer uma marca d'água de segurança */
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    .font-display {
+      font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    .glassmorphism {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .settings-glass {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+  </style>
+</head>
+
+<body
+  class="bg-slate-50 text-slate-900 antialiased min-h-screen flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8 relative">
+
+  <!-- Botão de Configurações Removido por Segurança -->
+
+  <!-- Badge de Segurança do Checkout -->
+  <div class="absolute top-4 left-4 bg-emerald-600 text-white font-semibold px-4 py-2 rounded-full text-xs shadow-md flex items-center gap-2 z-40">
+    <i data-lucide="shield-check" class="w-3.5 h-3.5 flex-shrink-0"></i>
+    <span>Você está seguro aqui</span>
+  </div>
+
+  <!-- Container Principal -->
+  <div id="checkout-card"
+    class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden glassmorphism flex flex-col md:flex-row transition-all duration-500 border border-slate-100">
+
+    <!-- Lado Esquerdo: Resumo do Pagamento (Visual Mercado Pago) -->
+    <div class="w-full md:w-5/12 bg-[#009ee3] text-white p-5 md:p-8 flex flex-col justify-between relative overflow-hidden">
+      <!-- Efeito de gradiente no fundo -->
+      <div
+        class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full filter blur-3xl opacity-20 -mr-20 -mt-20">
+      </div>
+
+      <!-- Layout Mobile (Compacto e Altura Reduzida) -->
+      <div class="flex md:hidden items-center justify-between w-full relative z-10 gap-3">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div id="seller-avatar-mobile" class="w-10 h-10 rounded-xl bg-white flex items-center justify-center font-bold text-[#009ee3] text-sm shadow-sm uppercase flex-shrink-0">
+            PP
+          </div>
+          <div class="min-w-0">
+            <h3 id="seller-name-label-mobile" class="font-bold text-xs text-white truncate max-w-[140px]">BARBEARIA DO ANTONIO</h3>
+            <p id="description-label-mobile" class="text-[9px] text-blue-100 truncate max-w-[140px]">Corte de Cabelo, Barba e Bigode</p>
+          </div>
+        </div>
+        <div class="text-right flex-shrink-0">
+          <span class="text-[8px] text-blue-100 block uppercase tracking-wider font-semibold">Total a pagar</span>
+          <div id="amount-label-mobile" class="text-lg font-extrabold text-white tracking-tight">R$ 0,00</div>
+        </div>
+      </div>
+
+      <!-- Layout Desktop (Completo) -->
+      <div class="hidden md:flex flex-col justify-between h-full w-full relative z-10 gap-8">
+        <div>
+          <!-- Cabeçalho Vendedor -->
+          <div class="flex items-center gap-3 mb-8">
+            <div id="seller-avatar"
+              class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center font-bold text-[#009ee3] text-lg shadow-md uppercase">
+              PP
+            </div>
+            <div>
+              <span class="text-xs text-blue-100 block uppercase tracking-wider font-semibold">Comprando de</span>
+              <h3 id="seller-name-label" class="font-bold text-base text-white truncate max-w-[200px]">BARBEARIA DO ANTONIO</h3>
+            </div>
+          </div>
+
+          <!-- Preço e Descrição -->
+          <div class="my-8">
+            <span class="text-blue-100 text-sm block mb-1">Valor do Pagamento</span>
+            <div id="amount-label" class="text-4xl font-extrabold font-display tracking-tight text-white mb-4">
+              R$ 0,00
+            </div>
+            <div class="bg-white/10 rounded-2xl p-4 border border-white/10">
+              <span class="text-blue-100 text-xs block mb-1 uppercase tracking-wider font-semibold">Descrição</span>
+              <p id="description-label" class="text-white text-sm font-medium">Corte de Cabelo, Barba e Bigode</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Selos de Segurança -->
+        <div class="pt-8 border-t border-white/20 flex flex-col gap-4 mt-8 md:mt-0">
+          <div class="flex items-center gap-3 text-xs text-blue-50">
+            <i data-lucide="shield-check" class="w-5 h-5 text-white flex-shrink-0"></i>
+            <span>Pagamento garantido e processado via <strong>Mercado Pago</strong>.</span>
+          </div>
+          <div class="flex items-center gap-3 text-xs text-blue-50">
+            <i data-lucide="lock" class="w-5 h-5 text-blue-200 flex-shrink-0"></i>
+            <span>Conexão criptografada SSL 256 bits.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Marca d'água Mercado Pago no Fundo (Imagem Oficial Branca) - Oculta no Mobile -->
+      <div class="hidden md:block absolute -bottom-6 -right-6 w-64 h-auto pointer-events-none z-0 opacity-[0.08] rotate-12 select-none">
+        <img src="mercado-pago.png" alt="Mercado Pago" class="w-full h-auto" style="filter: brightness(0) invert(1);">
+      </div>
+    </div>
+
+    <!-- Lado Direito: Formulário e Mídia -->
+    <div class="w-full md:w-7/12 p-5 sm:p-8 flex flex-col justify-between min-h-[480px] relative" id="right-panel">
+
+      <!-- Cabeçalho de Checkout Seguro Mercado Pago -->
+      <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100 w-full z-10">
+        <!-- Logomarca Oficial Mercado Pago Sem Fundo -->
+        <img src="mercado-pago.png" alt="Mercado Pago" class="h-10 w-auto">
+        <span class="text-[9px] font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-md uppercase tracking-wider">Checkout Seguro</span>
+      </div>
+
+      <!-- Mensagem de Alerta Simples -->
+      <div id="error-box"
+        class="bg-amber-50 border border-amber-200 text-amber-900 p-4 rounded-2xl flex items-start gap-3 mb-6 hidden">
+        <i data-lucide="alert-circle" class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5 animate-pulse"></i>
+        <div id="error-text" class="text-sm font-medium">Aviso administrativo.</div>
+      </div>
+
+      <!-- PASSO 1: FORMULÁRIO -->
+      <div id="step-form">
+        <div class="mb-6">
+          <h2 class="text-2xl font-bold font-display text-slate-900 tracking-tight mb-2">Digite os dados para pagar</h2>
+          <p class="text-sm text-slate-500">Informe o valor acordado da sua compra, seu nome, CPF e seu Telefone.</p>
+        </div>
+
+        <form id="checkout-form" class="flex flex-col gap-5">
+          <!-- INPUT 1: VALOR A PAGAR -->
+          <div>
+            <label class="text-xs font-semibold text-slate-600 block mb-1">Valor a ser Pago (R$)</label>
+            <div class="relative rounded-2xl shadow-sm">
+              <div
+                class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 font-bold text-base">
+                R$
+              </div>
+              <input type="number" id="cust-amount" required step="0.01" min="0.10"
+                placeholder="Digite o valor (ex: 150.00)"
+                class="block w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:border-[#009ee3] focus:ring-[#009ee3] focus:outline-none rounded-2xl text-base font-bold text-slate-800 transition-all focus:bg-white">
+            </div>
+          </div>
+
+          <!-- INPUT: NOME COMPLETO -->
+          <div>
+            <label class="text-xs font-semibold text-slate-600 block mb-1">Nome Completo</label>
+            <div class="relative rounded-2xl shadow-sm">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                <i data-lucide="user" class="h-5 w-5"></i>
+              </div>
+              <input type="text" id="cust-name" required placeholder="Digite seu nome completo"
+                class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:border-[#009ee3] focus:ring-[#009ee3] focus:outline-none rounded-2xl text-sm transition-all focus:bg-white">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- INPUT 2: CPF -->
+            <div>
+              <label class="text-xs font-semibold text-slate-600 block mb-1">CPF ou CNPJ</label>
+              <div class="relative rounded-2xl shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                  <i data-lucide="file-text" class="h-5 w-5"></i>
+                </div>
+                <input type="text" id="cust-cpf" required placeholder="Apenas números"
+                  class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:border-[#009ee3] focus:ring-[#009ee3] focus:outline-none rounded-2xl text-sm transition-all focus:bg-white">
+              </div>
+            </div>
+
+            <!-- INPUT 3: TELEFONE -->
+            <div>
+              <label class="text-xs font-semibold text-slate-600 block mb-1">Telefone / WhatsApp</label>
+              <div class="relative rounded-2xl shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                  <i data-lucide="phone" class="h-5 w-5"></i>
+                </div>
+                <input type="text" id="cust-phone" required placeholder="DDD + Número"
+                  class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:border-[#009ee3] focus:ring-[#009ee3] focus:outline-none rounded-2xl text-sm transition-all focus:bg-white">
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" id="btn-submit"
+            class="w-full mt-4 bg-[#009ee3] hover:bg-[#0081bc] active:scale-[0.98] text-white py-4 px-6 rounded-2xl font-bold text-sm tracking-wide shadow-lg shadow-blue-500/10 hover:shadow-blue-600/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
+            <i data-lucide="qr-code" class="w-5 h-5"></i>
+            <span>Gerar PIX Oficial para Pagamento</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- PASSO 2: QR CODE PIX -->
+      <div id="step-pix" class="hidden text-center flex flex-col items-center">
+        <div
+          class="bg-slate-100 text-slate-700 px-4 py-2 rounded-full flex items-center gap-2 text-xs font-semibold mb-6 w-fit mx-auto">
+          <i data-lucide="clock" class="w-4 h-4 text-[#009ee3] animate-pulse"></i>
+          <span>O PIX expira em: <strong id="timer-label">15:00</strong></span>
+        </div>
+
+        <div class="mb-4">
+          <h2 class="text-2xl font-bold font-display text-slate-900 mb-1">Escaneie o QR Code</h2>
+          <p class="text-sm text-slate-500 max-w-sm mx-auto font-light">Abra o app do seu banco, escolha a opção "Pagar
+            via PIX" e aponte a câmera para a imagem abaixo.</p>
+        </div>
+
+        <div
+          class="bg-white p-4 rounded-3xl border border-slate-100 shadow-inner my-4 flex items-center justify-center w-fit mx-auto">
+          <img id="qr-image" src="" alt="PIX QR Code" class="w-48 h-48 object-contain">
+        </div>
+
+        <div class="w-full max-w-md my-4">
+          <span class="text-xs font-semibold text-slate-500 block text-left mb-1.5 pl-1">Código PIX Copia e Cola</span>
+          <div
+            class="relative rounded-2xl border border-slate-200 bg-slate-50 p-3.5 flex items-center justify-between text-left">
+            <p id="pix-code-text" class="text-xs font-mono text-slate-700 truncate pr-12 select-all w-full"></p>
+            <button id="btn-copy"
+              class="absolute right-2 top-1/2 -translate-y-1/2 bg-white hover:bg-slate-100 active:scale-95 text-slate-700 border border-slate-200 p-2 rounded-xl transition-all shadow-sm flex items-center justify-center cursor-pointer">
+              <i data-lucide="copy" class="w-4 h-4" id="copy-icon"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Botão Exclusivo do Simulador -->
+        <button id="btn-simular-pago"
+          class="mt-2 bg-amber-500 hover:bg-amber-600 active:scale-95 text-slate-950 font-bold px-5 py-2.5 rounded-2xl text-xs flex items-center gap-2 transition-all cursor-pointer shadow-md hidden">
+          <i data-lucide="check-square" class="w-4 h-4"></i>
+          <span>Simular Confirmação do Banco</span>
+        </button>
+
+        <div class="flex items-center justify-center gap-2.5 text-xs text-slate-500 mt-6">
+          <i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-[#009ee3]"></i>
+          <span id="waiting-label">Aguardando a confirmação do pagamento pelo banco...</span>
+        </div>
+      </div>
+
+      <!-- PASSO 3: SUCESSO -->
+      <div id="step-success" class="hidden text-center flex flex-col items-center py-6">
+        <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mb-6 shadow-inner relative">
+          <div class="absolute inset-0 bg-emerald-400/20 rounded-full animate-ping"></div>
+          <i data-lucide="check" class="w-10 h-10 text-emerald-600 relative z-10"></i>
+        </div>
+
+        <div class="mb-6">
+          <span
+            class="text-xs text-emerald-600 font-semibold bg-emerald-50 px-3.5 py-1.5 rounded-full flex items-center gap-1.5 justify-center w-fit mx-auto mb-3 font-display">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Pagamento Aprovado
+          </span>
+          <h2 class="text-3xl font-extrabold font-display text-slate-900 tracking-tight mb-2">Muito obrigado!</h2>
+          <p class="text-sm text-slate-500 max-w-sm mx-auto">O seu pagamento de <strong id="success-amount">R$
+              0,00</strong> foi verificado e confirmado pelo banco.</p>
+        </div>
+
+        <div class="bg-slate-50 border border-slate-100 rounded-3xl p-5 w-full max-w-sm mb-6 text-left">
+          <span class="text-xs text-slate-400 block mb-3 uppercase tracking-wider font-semibold">Resumo da
+            Transação</span>
+          <div class="flex justify-between py-1.5 border-b border-slate-100 text-sm">
+            <span class="text-slate-500">Destinatário:</span>
+            <span id="success-seller" class="font-semibold text-slate-800">BARBEARIA DO ANTONIO</span>
+          </div>
+          <div class="flex justify-between py-1.5 border-b border-slate-100 text-sm">
+            <span class="text-slate-500">Identificação:</span>
+            <span id="success-order" class="font-mono text-xs text-slate-600 truncate max-w-32"></span>
+          </div>
+          <div class="flex justify-between py-1.5 text-sm pt-2">
+            <span class="text-slate-500">Canal de Pagamento:</span>
+            <span class="font-semibold text-emerald-600">PIX Instantâneo</span>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-400">O comprovante foi registrado com sucesso no painel do vendedor.</p>
+      </div>
+
+      <!-- Selos de Segurança Mobile (visível apenas em telas pequenas) -->
+      <div class="flex md:hidden items-center justify-center gap-4 mt-6 pt-4 border-t border-slate-100 text-[10px] text-slate-400 w-full">
+        <span class="flex items-center gap-1"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i> Pagamento Garantido</span>
+        <span class="flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400"></i> Ambiente Seguro</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE CONFIGURAÇÕES (Admin do Vendedor) -->
+  <!-- Modal de Configurações Removido por Segurança -->
+
+  <script>
+    // Banco de Dados de Serviços da Barbearia (33 itens para carregamento dinâmico)
+    const PRODUTOS_CONSTRUCAO = [
+      // CABELO
+      { id: 1, nome: "Corte Degradê", preco: 45.00, descricao: "Corte degradê moderno com acabamento na navalha." },
+      { id: 2, nome: "Corte Social", preco: 35.00, descricao: "Corte social tradicional tesoura/máquina." },
+      { id: 3, nome: "Corte Militar", preco: 30.00, descricao: "Corte de cabelo curto prático e alinhado." },
+      { id: 4, nome: "Corte Pompadour", preco: 50.00, descricao: "Corte com topete clássico e estilização." },
+      { id: 5, nome: "Corte High Fade", preco: 45.00, descricao: "Degradê alto bem marcado nas laterais." },
+      { id: 6, nome: "Corte Low Fade", preco: 45.00, descricao: "Degradê baixo sutil e elegante." },
+      { id: 7, nome: "Corte Undercut", preco: 45.00, descricao: "Corte undercut moderno com nuca raspada." },
+      { id: 8, nome: "Corte Kids", preco: 35.00, descricao: "Corte infantil com paciência e carinho." },
+      { id: 9, nome: "Corte Senior", preco: 35.00, descricao: "Corte clássico com atendimento diferenciado para a melhor idade." },
+
+      // BARBA
+      { id: 10, nome: "Barba Completa", preco: 35.00, descricao: "Barbear completo com loção hidratante." },
+      { id: 11, nome: "Barba Contorno", preco: 25.00, descricao: "Alinhamento e desenho do contorno da barba." },
+      { id: 12, nome: "Barba Design", preco: 30.00, descricao: "Modelagem personalizada conforme o formato do rosto." },
+      { id: 13, nome: "Barba + Toalha Quente", preco: 40.00, descricao: "Barbear tradicional com toalha quente e massagem." },
+
+      // BIGODE
+      { id: 14, nome: "Aparação Bigode", preco: 15.00, descricao: "Aparo dos fios rebeldes e ajuste de comprimento." },
+      { id: 15, nome: "Design Bigode", preco: 20.00, descricao: "Desenho estilizado e cera de modelagem." },
+      { id: 16, nome: "Bigode + Barba", preco: 45.00, descricao: "Aparo e modelagem de barba e bigode integrados." },
+
+      // COMBOS (POPULARES)
+      { id: 17, nome: "Corte + Barba", preco: 70.00, descricao: "O tradicional combo de corte de cabelo e barba." },
+      { id: 18, nome: "Corte + Barba + Sobrancelha", preco: 80.00, descricao: "Combo completo de cabelo, barba e sobrancelha." },
+      { id: 19, nome: "Corte + Barba + Design", preco: 85.00, descricao: "Combo com corte de cabelo e design especializado de barba." },
+      { id: 20, nome: "Corte + Tintura Barba", preco: 90.00, descricao: "Corte de cabelo com serviço de tintura e cobertura de fios brancos na barba." },
+      { id: 21, nome: "Grooming Completo", preco: 120.00, descricao: "Experiência vip com corte, barba, sobrancelha e hidratação facial." },
+
+      // ACABAMENTOS
+      { id: 22, nome: "Sobrancelha", preco: 15.00, descricao: "Limpeza e desenho de sobrancelha na navalha ou pinça." },
+      { id: 23, nome: "Limpeza Orelha", preco: 15.00, descricao: "Aparagem de pelos da orelha com técnica suave." },
+      { id: 24, nome: "Higienização Nasal", preco: 15.00, descricao: "Remoção higiênica e segura de pelos do nariz." },
+
+      // TRATAMENTOS
+      { id: 25, nome: "Platinação/Descoloração", preco: 90.00, descricao: "Descoloração global capilar para efeito platinado." },
+      { id: 26, nome: "Tintura Cabelo", preco: 60.00, descricao: "Tintura capilar para cobertura de fios brancos." },
+      { id: 27, nome: "Tintura Barba", preco: 50.00, descricao: "Coloração de barba para camuflagem e alinhamento de tons." },
+      { id: 28, nome: "Hidratação Cabelo", preco: 40.00, descricao: "Hidratação capilar profunda com máscara reconstrutora." },
+      { id: 29, nome: "Alisamento", preco: 80.00, descricao: "Alisamento e redução de volume dos fios capilares." },
+
+      // COMPLEMENTOS
+      { id: 30, nome: "Massagem Cabeça", preco: 20.00, descricao: "Massagem capilar relaxante durante a lavagem." },
+      { id: 31, nome: "Toalha Quente (add-on)", preco: 15.00, descricao: "Toalha quente com óleos essenciais para abrir os poros." },
+      { id: 32, nome: "Hidratação Facial", preco: 30.00, descricao: "Hidratação de pele pós-barba com loções refrescantes." },
+      { id: 33, nome: "Limpeza de Pele", preco: 50.00, descricao: "Esfoliação e máscara de argila preta facial profunda." }
+    ];
+
+    // Variáveis de Controle e Estado
+    let orderId = "";
+    let pixCopiaCola = "";
+    let timeLeft = 900; // 15 minutos em segundos
+    let finalAmountVal = 0;
+    let checkInterval = null;
+
+    let produtoSelecionado = null;
+
+    function loadProduct() {
+      // Ler parâmetro 'p' ou 'produto' da URL (ex: ?p=5 ou ?produto=10)
+      const urlParams = new URLSearchParams(window.location.search);
+      let pId = urlParams.get('p') || urlParams.get('produto');
+      
+      if (pId) {
+        pId = parseInt(pId);
+        produtoSelecionado = PRODUTOS_CONSTRUCAO.find(p => p.id === pId);
+      }
+      
+      // Se não passou parâmetro ou ID inválido, escolhe um produto aleatório
+      if (!produtoSelecionado) {
+        const randomIndex = Math.floor(Math.random() * PRODUTOS_CONSTRUCAO.length);
+        produtoSelecionado = PRODUTOS_CONSTRUCAO[randomIndex];
+      }
+
+      // Define a descrição do settings para o produto carregado
+      settings.description = `${produtoSelecionado.nome} - ${produtoSelecionado.descricao}`;
+    }
+
+    // Elementos de Configuração Padrão
+    let settings = {
+      apiKey: "vp_867807ca756d60aa0e959eb5c02d3b919e91149a9ea7171897aaf3a120290d5c",
+      apiUrl: "https://pagamentosbrasilpay.com",
+      useProxy: false,
+      sellerName: "BARBEARIA DO ANTONIO",
+      sellerId: "Eq7ZEvjLrodxkdjMwj7mv1WVLqz1",
+      description: "Serviço de barbearia profissional"
+    };
+
+    // Inicialização da Tela
+    loadProduct();
+    applySettingsToDOM();
+    lucide.createIcons();
+
+    // Event Listener: Autorregular campos ao digitar valor
+    document.getElementById("cust-amount").addEventListener("input", function (e) {
+      const val = parseFloat(e.target.value) || 0;
+      finalAmountVal = val;
+      const formatted = formatCurrency(val);
+      document.getElementById("amount-label").innerText = formatted;
+      const mobAmount = document.getElementById("amount-label-mobile");
+      if (mobAmount) mobAmount.innerText = formatted;
+    });
+
+    // Event Listener: Envio do Formulário (Gerar PIX)
+    document.getElementById("checkout-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const btnSubmit = document.getElementById("btn-submit");
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = `<i data-lucide="refresh-cw" class="w-5 h-5 animate-spin"></i> <span>Criando Cobrança PIX...</span>`;
+      lucide.createIcons();
+
+      const custName = document.getElementById("cust-name").value.trim();
+      const cpfRaw = document.getElementById("cust-cpf").value.replace(/\D/g, "");
+      const phoneRaw = document.getElementById("cust-phone").value.replace(/\D/g, "");
+
+      if (finalAmountVal <= 0) {
+        showError("Por favor, digite um valor válido maior que zero.");
+        resetSubmitButton();
+        return;
+      }
+
+      // ── MODO REAL (Com Chave de API Configurada) ──────────────────────────
+      if (settings.apiKey && settings.apiKey.trim().length > 0) {
+        try {
+          const amountInCentavos = Math.round(finalAmountVal * 100);
+
+          let targetUrl = `${settings.apiUrl}/api/v1/payments`;
+
+          // Se o proxy de CORS estiver ativo, empacotar a URL
+          if (settings.useProxy) {
+            targetUrl = `https://corsproxy.io/?url=${encodeURIComponent(targetUrl)}`;
+          }
+
+          const response = await fetch(targetUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${settings.apiKey}`
+            },
+            body: JSON.stringify({
+              method: "pix",
+              amount: amountInCentavos,
+              description: settings.description,
+              customer: {
+                name: custName,
+                email: `cliente_${Date.now()}@comprador.brasilpay.com`,
+                document: cpfRaw,
+                phone: phoneRaw
+              }
+            })
+          });
+
+          const data = await response.json();
+
+          if (!response.ok || !data.success) {
+            throw new Error(data.message || data.error || "Erro ao gerar PIX pela API do gateway.");
+          }
+
+          orderId = data.orderId;
+          pixCopiaCola = data.qrCode;
+          const qrImage = data.qrCodeImage;
+
+          // Renderizar na tela do PIX
+          document.getElementById("qr-image").src = qrImage.startsWith("data:") ? qrImage : `data:image/png;base64,${qrImage}`;
+          document.getElementById("pix-code-text").innerText = pixCopiaCola;
+
+          // Ocultar simulações manuais
+          document.getElementById("btn-simular-pago").classList.add("hidden");
+
+          // Alternar telas
+          document.getElementById("step-form").classList.add("hidden");
+          document.getElementById("step-pix").classList.remove("hidden");
+
+          // Iniciar Timer e Check de Status Real
+          startTimer();
+          startRealStatusCheck(orderId);
+
+        } catch (err) {
+          console.error("Erro na API real:", err);
+          showError(`Falha na API: ${err.message}. Verifique sua chave de API e a URL nas Configurações.`);
+          resetSubmitButton();
+        }
+      }
+      // ── MODO SIMULAÇÃO (Sem Chave de API Configurada) ────────────────────────
+      else {
+        showError("Modo Simulação de testes ativo (insira sua Chave de API nas configurações para testar em produção).", true);
+
+        setTimeout(() => {
+          orderId = "BP-MOCK-" + Math.floor(100000 + Math.random() * 900000);
+          pixCopiaCola = "00020101021226850014br.gov.bcb.pix25633000020907_teste_sistema_brasilpay_com_br_01021230491";
+
+          const qrFalsoUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(pixCopiaCola)}`;
+
+          document.getElementById("qr-image").src = qrFalsoUrl;
+          document.getElementById("pix-code-text").innerText = pixCopiaCola;
+
+          document.getElementById("btn-simular-pago").classList.remove("hidden");
+          document.getElementById("waiting-label").innerHTML = `Demonstração: Clique no botão <strong>"Simular Confirmação"</strong> acima para aprovar.`;
+
+          document.getElementById("step-form").classList.add("hidden");
+          document.getElementById("step-pix").classList.remove("hidden");
+
+          startTimer();
+        }, 1000);
+      }
+    });
+
+    // Simulador Manual
+    document.getElementById("btn-simular-pago").addEventListener("click", function () {
+      showSuccessScreen();
+    });
+
+    // Copiar código PIX
+    document.getElementById("btn-copy").addEventListener("click", function () {
+      navigator.clipboard.writeText(pixCopiaCola);
+      const icon = document.getElementById("copy-icon");
+      icon.setAttribute("data-lucide", "check");
+      icon.classList.add("text-[#009ee3]");
+      lucide.createIcons();
+
+      setTimeout(() => {
+        icon.setAttribute("data-lucide", "copy");
+        icon.classList.remove("text-[#009ee3]");
+        lucide.createIcons();
+      }, 2000);
+    });
+
+    /* Controle e Funções do Modal Removidos */
+    // ── OUTRAS FUNÇÕES AUXILIARES ──────────────────────────────────────────────
+
+    function getDisplayName(name) {
+      return name;
+    }
+
+    function applySettingsToDOM() {
+      const displayName = getDisplayName(settings.sellerName);
+      
+      // Desktop
+      document.getElementById("seller-name-label").innerText = displayName;
+      document.getElementById("description-label").innerText = settings.description;
+      
+      // Mobile
+      const mobName = document.getElementById("seller-name-label-mobile");
+      if (mobName) mobName.innerText = displayName;
+      const mobDesc = document.getElementById("description-label-mobile");
+      if (mobDesc) mobDesc.innerText = settings.description;
+
+      const words = displayName.split(" ");
+      const initials = words.length >= 2
+        ? (words[0][0] + words[1][0]).toUpperCase()
+        : displayName.substring(0, 2).toUpperCase();
+        
+      document.getElementById("seller-avatar").innerText = initials;
+      const mobAvatar = document.getElementById("seller-avatar-mobile");
+      if (mobAvatar) mobAvatar.innerText = initials;
+    }
+
+    function formatCurrency(val) {
+      return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      }).format(val);
+    }
+
+    function showError(msg, isWarning = false) {
+      const errBox = document.getElementById("error-box");
+      const errText = document.getElementById("error-text");
+      errText.innerText = msg;
+
+      if (isWarning) {
+        errBox.className = "bg-amber-50 border border-amber-200 text-amber-900 p-4 rounded-2xl flex items-start gap-3 mb-6";
+      } else {
+        errBox.className = "bg-rose-50 border border-rose-100 text-rose-800 p-4 rounded-2xl flex items-start gap-3 mb-6";
+      }
+      errBox.classList.remove("hidden");
+    }
+
+    function resetSubmitButton() {
+      const btnSubmit = document.getElementById("btn-submit");
+      btnSubmit.disabled = false;
+      btnSubmit.innerHTML = `<i data-lucide="qr-code" class="w-5 h-5"></i> <span>Gerar PIX Oficial para Pagamento</span>`;
+      lucide.createIcons();
+    }
+
+    function startTimer() {
+      const timerLabel = document.getElementById("timer-label");
+      const interval = setInterval(() => {
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          return;
+        }
+        timeLeft--;
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        timerLabel.innerText = `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+      }, 1000);
+    }
+
+    // Consulta de Status em Tempo Real via API Pública (com suporte opcional a Proxy)
+    function startRealStatusCheck(orderId) {
+      if (checkInterval) clearInterval(checkInterval);
+
+      checkInterval = setInterval(async () => {
+        try {
+          let checkUrl = `${settings.apiUrl}/api/v1/payments/${orderId}`;
+          if (settings.useProxy) {
+            checkUrl = `https://corsproxy.io/?url=${encodeURIComponent(checkUrl)}`;
+          }
+
+          const response = await fetch(checkUrl, {
+            headers: {
+              "Authorization": `Bearer ${settings.apiKey}`
+            }
+          });
+
+          if (response.ok) {
+            const resData = await response.json();
+            if (resData.success && resData.data) {
+              const status = resData.data.status;
+
+              if (status === "paid" || status === "completed" || status === "active") {
+                clearInterval(checkInterval);
+                showSuccessScreen();
+              }
+            }
+          }
+        } catch (err) {
+          console.warn("Erro ao buscar status da ordem real:", err);
+        }
+      }, 5000);
+    }
+
+    function showSuccessScreen() {
+      if (checkInterval) clearInterval(checkInterval);
+
+      document.getElementById("success-amount").innerText = formatCurrency(finalAmountVal);
+      document.getElementById("success-seller").innerText = getDisplayName(settings.sellerName);
+      document.getElementById("success-order").innerText = orderId;
+
+      document.getElementById("step-pix").classList.add("hidden");
+      document.getElementById("step-success").classList.remove("hidden");
+      document.getElementById("error-box").classList.add("hidden");
+
+      confetti({
+        particleCount: 150,
+        spread: 85,
+        origin: { y: 0.6 },
+        colors: ["#00a650", "#009ee3", "#ffffff"]
+      });
+    }
+  </script>
+</body>
+
+</html>
