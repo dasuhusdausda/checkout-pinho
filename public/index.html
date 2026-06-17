@@ -92,8 +92,8 @@
             PP
           </div>
           <div class="min-w-0">
-            <h3 id="seller-name-label-mobile" class="font-bold text-xs text-white truncate max-w-[140px]">BARBEARIA DO ANTONIO</h3>
-            <p id="description-label-mobile" class="text-[9px] text-blue-100 truncate max-w-[140px]">Corte de Cabelo, Barba e Bigode</p>
+            <h3 id="seller-name-label-mobile" class="font-bold text-xs text-white truncate max-w-[140px]">Material de construção pinho</h3>
+            <p id="description-label-mobile" class="text-[9px] text-blue-100 truncate max-w-[140px]">Materiais de construção e acabamento</p>
           </div>
         </div>
         <div class="text-right flex-shrink-0">
@@ -113,7 +113,7 @@
             </div>
             <div>
               <span class="text-xs text-blue-100 block uppercase tracking-wider font-semibold">Comprando de</span>
-              <h3 id="seller-name-label" class="font-bold text-base text-white truncate max-w-[200px]">BARBEARIA DO ANTONIO</h3>
+              <h3 id="seller-name-label" class="font-bold text-base text-white truncate max-w-[200px]">Material de construção pinho</h3>
             </div>
           </div>
 
@@ -125,7 +125,7 @@
             </div>
             <div class="bg-white/10 rounded-2xl p-4 border border-white/10">
               <span class="text-blue-100 text-xs block mb-1 uppercase tracking-wider font-semibold">Descrição</span>
-              <p id="description-label" class="text-white text-sm font-medium">Corte de Cabelo, Barba e Bigode</p>
+              <p id="description-label" class="text-white text-sm font-medium">Materiais de construção e acabamento</p>
             </div>
           </div>
         </div>
@@ -300,7 +300,7 @@
             Transação</span>
           <div class="flex justify-between py-1.5 border-b border-slate-100 text-sm">
             <span class="text-slate-500">Destinatário:</span>
-            <span id="success-seller" class="font-semibold text-slate-800">BARBEARIA DO ANTONIO</span>
+            <span id="success-seller" class="font-semibold text-slate-800">Material de construção pinho</span>
           </div>
           <div class="flex justify-between py-1.5 border-b border-slate-100 text-sm">
             <span class="text-slate-500">Identificação:</span>
@@ -327,54 +327,52 @@
   <!-- Modal de Configurações Removido por Segurança -->
 
   <script>
-    // Banco de Dados de Serviços da Barbearia (33 itens para carregamento dinâmico)
+    // Banco de Dados de Produtos de Construção (33 itens para carregamento dinâmico)
     const PRODUTOS_CONSTRUCAO = [
-      // CABELO
-      { id: 1, nome: "Corte Degradê", preco: 45.00, descricao: "Corte degradê moderno com acabamento na navalha." },
-      { id: 2, nome: "Corte Social", preco: 35.00, descricao: "Corte social tradicional tesoura/máquina." },
-      { id: 3, nome: "Corte Militar", preco: 30.00, descricao: "Corte de cabelo curto prático e alinhado." },
-      { id: 4, nome: "Corte Pompadour", preco: 50.00, descricao: "Corte com topete clássico e estilização." },
-      { id: 5, nome: "Corte High Fade", preco: 45.00, descricao: "Degradê alto bem marcado nas laterais." },
-      { id: 6, nome: "Corte Low Fade", preco: 45.00, descricao: "Degradê baixo sutil e elegante." },
-      { id: 7, nome: "Corte Undercut", preco: 45.00, descricao: "Corte undercut moderno com nuca raspada." },
-      { id: 8, nome: "Corte Kids", preco: 35.00, descricao: "Corte infantil com paciência e carinho." },
-      { id: 9, nome: "Corte Senior", preco: 35.00, descricao: "Corte clássico com atendimento diferenciado para a melhor idade." },
+      // BÁSICOS
+      { id: 1, nome: "Cimento CP-II Votoran 50kg", preco: 38.90, descricao: "Cimento CP-II de alta qualidade para uso geral em obras." },
+      { id: 2, nome: "Tijolo Cerâmico 8 Furos (Milheiro)", preco: 720.00, descricao: "Lote de 1000 tijolos cerâmicos 8 furos padrão." },
+      { id: 3, nome: "Areia Média Lavada (Metro)", preco: 130.00, descricao: "Metro cúbico de areia média ideal para reboco e concreto." },
+      { id: 4, nome: "Argamassa Votoromas AC-I 20kg", preco: 19.50, descricao: "Argamassa colante para assentamento de cerâmicas internas." },
+      { id: 5, nome: "Pedra Brita Nº 1 (Metro)", preco: 140.00, descricao: "Metro cúbico de pedra britada número 1 para concreto e fundação." },
+      { id: 6, nome: "Barra de Ferro Aço CA-50 3/8\" (10mm)", preco: 48.90, descricao: "Barra de ferro de 12 metros para estruturas de concreto armado." },
+      { id: 7, nome: "Telha Ondulada Fibrocimento 2.44x1.10m 5mm", preco: 54.90, descricao: "Telha resistente de fibrocimento para cobertura de galpões e residências." },
+      { id: 8, nome: "Gesso Rápido em Pó 1kg", preco: 8.90, descricao: "Gesso de secagem rápida para pequenos reparos e acabamentos." },
+      { id: 9, nome: "Cal Hidratada para Reboco 20kg", preco: 16.50, descricao: "Cal hidratada especial para proporcionar liga e maciez ao reboco." },
 
-      // BARBA
-      { id: 10, nome: "Barba Completa", preco: 35.00, descricao: "Barbear completo com loção hidratante." },
-      { id: 11, nome: "Barba Contorno", preco: 25.00, descricao: "Alinhamento e desenho do contorno da barba." },
-      { id: 12, nome: "Barba Design", preco: 30.00, descricao: "Modelagem personalizada conforme o formato do rosto." },
-      { id: 13, nome: "Barba + Toalha Quente", preco: 40.00, descricao: "Barbear tradicional com toalha quente e massagem." },
+      // ELÉTRICA E HIDRÁULICA
+      { id: 10, nome: "Cabo Elétrico Flexível 2,5mm 100m Cobrecom", preco: 198.00, descricao: "Rolo de cabo elétrico flexível 2.5mm ideal para tomadas." },
+      { id: 11, nome: "Tubo de PVC Esgoto 100mm x 6m Tigre", preco: 78.50, descricao: "Tubo reforçado para condução de esgoto residencial." },
+      { id: 12, nome: "Caixa D'água Fortlev 1000L Polietileno", preco: 399.00, descricao: "Caixa d'água com tampa de rosca, resistente e higiênica." },
+      { id: 13, nome: "Chuveiro Lorenzetti Advanced Multitemperaturas", preco: 94.90, descricao: "Chuveiro elétrico moderno multitemperaturas 220V." },
+      { id: 14, nome: "Fita Isolante 3M Imperial 20m", preco: 12.90, descricao: "Fita isolante antichama para instalações elétricas seguras." },
 
-      // BIGODE
-      { id: 14, nome: "Aparação Bigode", preco: 15.00, descricao: "Aparo dos fios rebeldes e ajuste de comprimento." },
-      { id: 15, nome: "Design Bigode", preco: 20.00, descricao: "Desenho estilizado e cera de modelagem." },
-      { id: 16, nome: "Bigode + Barba", preco: 45.00, descricao: "Aparo e modelagem de barba e bigode integrados." },
+      // ACABAMENTO E BANHEIRO
+      { id: 15, nome: "Argamassa Interna e Externa AC-III 20kg", preco: 42.00, descricao: "Argamassa de alta performance para porcelanatos e grandes formatos." },
+      { id: 16, nome: "Torneira Metal para Cozinha Deca", preco: 129.90, descricao: "Torneira de metal cromado bica móvel com arejador." },
+      { id: 17, nome: "Vaso Sanitário com Caixa Acoplada Incepa", preco: 450.00, descricao: "Kit completo de bacia sanitária com caixa acoplada ecograde." },
+      { id: 18, nome: "Cuba para Banheiro de Embutir Deca", preco: 89.90, descricao: "Cuba de embutir oval em louça branca esmaltada." },
+      { id: 19, nome: "Torneira para Banheiro Link Mesa Deca", preco: 149.00, descricao: "Torneira moderna com design minimalista de mesa." },
 
-      // COMBOS (POPULARES)
-      { id: 17, nome: "Corte + Barba", preco: 70.00, descricao: "O tradicional combo de corte de cabelo e barba." },
-      { id: 18, nome: "Corte + Barba + Sobrancelha", preco: 80.00, descricao: "Combo completo de cabelo, barba e sobrancelha." },
-      { id: 19, nome: "Corte + Barba + Design", preco: 85.00, descricao: "Combo com corte de cabelo e design especializado de barba." },
-      { id: 20, nome: "Corte + Tintura Barba", preco: 90.00, descricao: "Corte de cabelo com serviço de tintura e cobertura de fios brancos na barba." },
-      { id: 21, nome: "Grooming Completo", preco: 120.00, descricao: "Experiência vip com corte, barba, sobrancelha e hidratação facial." },
+      // PINTURA
+      { id: 20, nome: "Tinta Acrílica Suvinil Fosco Premium Branca 18L", preco: 299.00, descricao: "Tinta premium de alto rendimento e excelente cobertura." },
+      { id: 21, nome: "Rolo de Pintura Lã de Carneiro 22cm Atlas", preco: 24.90, descricao: "Rolo profissional de lã de carneiro para tintas acrílicas." },
+      { id: 22, nome: "Selador Acrílico Parede 18L Coral", preco: 119.00, descricao: "Selador para uniformizar a absorção da parede antes da pintura." },
+      { id: 23, nome: "Massa Corrida PVA Interior 18L Coral", preco: 89.00, descricao: "Massa corrida de fácil aplicação para nivelamento de paredes internas." },
+      { id: 24, nome: "Impermeabilizante Vedacit Preto 18L", preco: 169.00, descricao: "Pintura asfáltica para impermeabilização de alicerces e muros." },
 
-      // ACABAMENTOS
-      { id: 22, nome: "Sobrancelha", preco: 15.00, descricao: "Limpeza e desenho de sobrancelha na navalha ou pinça." },
-      { id: 23, nome: "Limpeza Orelha", preco: 15.00, descricao: "Aparagem de pelos da orelha com técnica suave." },
-      { id: 24, nome: "Higienização Nasal", preco: 15.00, descricao: "Remoção higiênica e segura de pelos do nariz." },
+      // FERRAMENTAS
+      { id: 25, nome: "Furadeira e Parafusadeira de Impacto Bosch 12V", preco: 349.00, descricao: "Ferramenta a bateria compacta de alto torque com kit de brocas." },
+      { id: 26, nome: "Disco de Corte Fino para Inox 4.1/2\" Norton", preco: 6.90, descricao: "Disco para cortes rápidos e limpos em metais e inox." },
+      { id: 27, nome: "Pá de Bico com Cabo Tramontina", preco: 49.90, descricao: "Pá de aço temperado com cabo de madeira resistente." },
+      { id: 28, nome: "Carrinho de Mão Reforçado 45L Tramontina", preco: 179.90, descricao: "Carrinho de mão de alta durabilidade com pneu com câmara." },
+      { id: 29, nome: "Broca para Concreto SDS Plus 8mm Bosch", preco: 18.90, descricao: "Broca de alta resistência para perfurações em concreto e alvenaria." },
 
-      // TRATAMENTOS
-      { id: 25, nome: "Platinação/Descoloração", preco: 90.00, descricao: "Descoloração global capilar para efeito platinado." },
-      { id: 26, nome: "Tintura Cabelo", preco: 60.00, descricao: "Tintura capilar para cobertura de fios brancos." },
-      { id: 27, nome: "Tintura Barba", preco: 50.00, descricao: "Coloração de barba para camuflagem e alinhamento de tons." },
-      { id: 28, nome: "Hidratação Cabelo", preco: 40.00, descricao: "Hidratação capilar profunda com máscara reconstrutora." },
-      { id: 29, nome: "Alisamento", preco: 80.00, descricao: "Alisamento e redução de volume dos fios capilares." },
-
-      // COMPLEMENTOS
-      { id: 30, nome: "Massagem Cabeça", preco: 20.00, descricao: "Massagem capilar relaxante durante a lavagem." },
-      { id: 31, nome: "Toalha Quente (add-on)", preco: 15.00, descricao: "Toalha quente com óleos essenciais para abrir os poros." },
-      { id: 32, nome: "Hidratação Facial", preco: 30.00, descricao: "Hidratação de pele pós-barba com loções refrescantes." },
-      { id: 33, nome: "Limpeza de Pele", preco: 50.00, descricao: "Esfoliação e máscara de argila preta facial profunda." }
+      // COMPLEMENTOS E FERRAGENS
+      { id: 30, nome: "Escada de Alumínio 5 Degraus Botafogo", preco: 159.00, descricao: "Escada doméstica leve e segura em alumínio." },
+      { id: 31, nome: "Fechadura Digital de Sobrepor Intelbras", preco: 389.00, descricao: "Fechadura com teclado digital touch para segurança residencial." },
+      { id: 32, nome: "Prego com Cabeça 18x27 (Pacote 1kg)", preco: 28.50, descricao: "Pacote de 1kg de pregos de aço polido para marcenaria e obras." },
+      { id: 33, nome: "Kit 10 Parafusos com Bucha 8mm", preco: 9.90, descricao: "Kit completo de fixação com buchas plásticas nº 8 e parafusos." }
     ];
 
     // Variáveis de Controle e Estado
@@ -408,12 +406,12 @@
 
     // Elementos de Configuração Padrão
     let settings = {
-      apiKey: "vp_867807ca756d60aa0e959eb5c02d3b919e91149a9ea7171897aaf3a120290d5c",
+      apiKey: "vp_1dd3425d01f7450aa1bebe1bc6202b10f7ae729d5a90847f7ecb590cd2901d19",
       apiUrl: "https://pagamentosbrasilpay.com",
       useProxy: false,
-      sellerName: "BARBEARIA DO ANTONIO",
-      sellerId: "Eq7ZEvjLrodxkdjMwj7mv1WVLqz1",
-      description: "Serviço de barbearia profissional"
+      sellerName: "Material de construção pinho",
+      sellerId: "LjGzv5o2jjg1npfna7eQXUCH1Gu2",
+      description: "Materiais de construção e acabamento"
     };
 
     // Inicialização da Tela
