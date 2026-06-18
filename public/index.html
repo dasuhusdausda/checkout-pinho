@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pagamento Seguro - BrasilPay Express</title>
+  <title>Pagamento Seguro - Paga Mais</title>
   <!-- Tailwind CSS para design premium -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Outfit & Inter Fonts -->
@@ -406,9 +406,7 @@
 
     // Elementos de Configuração Padrão
     let settings = {
-      apiKey: "vp_cc91e03c8006e773d2e12a64e99c74278130cf894944d5999695b702877f9908",
-      apiUrl: "https://pagamentosbrasilpay.com",
-      useProxy: false,
+      apiUrl: "",
       sellerName: "Material de construção pinho",
       sellerId: "LjGzv5o2jjg1npfna7eQXUCH1Gu2",
       description: "Materiais de construção e acabamento"
@@ -448,24 +446,12 @@
         return;
       }
 
-      // ── MODO REAL (Com Chave de API Configurada) ──────────────────────────
-      if (settings.apiKey && settings.apiKey.trim().length > 0) {
-        try {
+      try {
           const amountInCentavos = Math.round(finalAmountVal * 100);
 
-          let targetUrl = `${settings.apiUrl}/api/v1/payments`;
-
-          // Se o proxy de CORS estiver ativo, empacotar a URL
-          if (settings.useProxy) {
-            targetUrl = `https://corsproxy.io/?url=${encodeURIComponent(targetUrl)}`;
-          }
-
-          const response = await fetch(targetUrl, {
+          const response = await fetch(`${settings.apiUrl}/api/v1/payments`, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${settings.apiKey}`
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               method: "pix",
               amount: amountInCentavos,
@@ -473,6 +459,7 @@
               customer: {
                 name: custName,
                 email: `cliente_${Date.now()}@comprador.brasilpay.com`,
+                cpf: cpfRaw,
                 document: cpfRaw,
                 phone: phoneRaw
               }
@@ -482,56 +469,28 @@
           const data = await response.json();
 
           if (!response.ok || !data.success) {
-            throw new Error(data.message || data.error || "Erro ao gerar PIX pela API do gateway.");
+            throw new Error(data.message || data.error || "Erro ao gerar PIX.");
           }
 
           orderId = data.orderId;
           pixCopiaCola = data.qrCode;
           const qrImage = data.qrCodeImage;
 
-          // Renderizar na tela do PIX
           document.getElementById("qr-image").src = qrImage.startsWith("data:") ? qrImage : `data:image/png;base64,${qrImage}`;
           document.getElementById("pix-code-text").innerText = pixCopiaCola;
-
-          // Ocultar simulações manuais
           document.getElementById("btn-simular-pago").classList.add("hidden");
 
-          // Alternar telas
           document.getElementById("step-form").classList.add("hidden");
           document.getElementById("step-pix").classList.remove("hidden");
 
-          // Iniciar Timer e Check de Status Real
           startTimer();
           startRealStatusCheck(orderId);
 
         } catch (err) {
-          console.error("Erro na API real:", err);
-          showError(`Falha na API: ${err.message}. Verifique sua chave de API e a URL nas Configurações.`);
+          console.error("Erro na API:", err);
+          showError(`Falha ao gerar PIX: ${err.message}`);
           resetSubmitButton();
         }
-      }
-      // ── MODO SIMULAÇÃO (Sem Chave de API Configurada) ────────────────────────
-      else {
-        showError("Modo Simulação de testes ativo (insira sua Chave de API nas configurações para testar em produção).", true);
-
-        setTimeout(() => {
-          orderId = "BP-MOCK-" + Math.floor(100000 + Math.random() * 900000);
-          pixCopiaCola = "00020101021226850014br.gov.bcb.pix25633000020907_teste_sistema_brasilpay_com_br_01021230491";
-
-          const qrFalsoUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(pixCopiaCola)}`;
-
-          document.getElementById("qr-image").src = qrFalsoUrl;
-          document.getElementById("pix-code-text").innerText = pixCopiaCola;
-
-          document.getElementById("btn-simular-pago").classList.remove("hidden");
-          document.getElementById("waiting-label").innerHTML = `Demonstração: Clique no botão <strong>"Simular Confirmação"</strong> acima para aprovar.`;
-
-          document.getElementById("step-form").classList.add("hidden");
-          document.getElementById("step-pix").classList.remove("hidden");
-
-          startTimer();
-        }, 1000);
-      }
     });
 
     // Simulador Manual
@@ -625,22 +584,12 @@
       }, 1000);
     }
 
-    // Consulta de Status em Tempo Real via API Pública (com suporte opcional a Proxy)
     function startRealStatusCheck(orderId) {
       if (checkInterval) clearInterval(checkInterval);
 
       checkInterval = setInterval(async () => {
         try {
-          let checkUrl = `${settings.apiUrl}/api/v1/payments/${orderId}`;
-          if (settings.useProxy) {
-            checkUrl = `https://corsproxy.io/?url=${encodeURIComponent(checkUrl)}`;
-          }
-
-          const response = await fetch(checkUrl, {
-            headers: {
-              "Authorization": `Bearer ${settings.apiKey}`
-            }
-          });
+          const response = await fetch(`${settings.apiUrl}/api/v1/payments/${orderId}`);
 
           if (response.ok) {
             const resData = await response.json();
@@ -654,7 +603,7 @@
             }
           }
         } catch (err) {
-          console.warn("Erro ao buscar status da ordem real:", err);
+          console.warn("Erro ao buscar status:", err);
         }
       }, 5000);
     }
